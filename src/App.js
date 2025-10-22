@@ -6,28 +6,37 @@ function App() {
   const profileImageUrl = "https://drive.google.com/file/d/1IUTbxJqHN2cm0MSJ2TghnK-73eAgQte_/view?usp=sharing";
   
   const handleContactCard = () => {
-    // Create vCard data with image
+    // Create vCard data with image (iOS compatible format)
     // Note: Replace the PHOTO URL with your actual profile image URL
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:Jacob Klaven
+N:Klaven;Jacob;;;
 ORG:Magnivents
-TEL:+19013597778
-EMAIL:magnivents@gmail.com
-URL:https://magnivents.com
-PHOTO:${profileImageUrl}
+TITLE:Owner
+TEL;TYPE=CELL:+19013597778
+EMAIL;TYPE=WORK:magnivents@gmail.com
+URL;TYPE=WORK:https://magnivents.com
+PHOTO;TYPE=JPEG:${profileImageUrl}
 END:VCARD`;
     
-    // Create blob and download
-    const blob = new Blob([vcard], { type: 'text/vcard' });
+    // Create blob and download as .vcf file for iOS compatibility
+    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'jacob-klaven.vcf';
+    link.download = 'Jacob-Klaven.vcf';
+    link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
+    
+    // iOS Safari compatibility - trigger download
+    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+      // Additional iOS-specific handling if needed
+      console.log('iOS device detected - vCard download initiated');
+    }
   };
 
   const handleEmail = () => {
