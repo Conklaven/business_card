@@ -3,11 +3,38 @@ import './App.css';
 
 function App() {
   // Customize your profile image here
-  const profileImageUrl = "https://drive.google.com/file/d/1IUTbxJqHN2cm0MSJ2TghnK-73eAgQte_/view?usp=sharing";
+  // For Google Drive: Convert sharing URL to direct image URL
+  // Original: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+  // Direct: https://drive.google.com/uc?export=view&id=FILE_ID
+  const profileImageUrl = "https://drive.google.com/uc?export=view&id=1IUTbxJqHN2cm0MSJ2TghnK-73eAgQte_";
   
-  const handleContactCard = () => {
-    // Create vCard data with image (iOS compatible format)
-    // Note: Replace the PHOTO URL with your actual profile image URL
+  // Convert image to base64 for vCard (iOS compatible)
+  const imageToBase64 = (url) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+        resolve(dataURL.split(',')[1]); // Remove data:image/jpeg;base64, prefix
+      };
+      img.onerror = () => {
+        // Fallback to placeholder if image fails to load
+        resolve('/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A');
+      };
+      img.src = url;
+    });
+  };
+
+  const handleContactCard = async () => {
+    // Convert image to base64 for iOS compatibility
+    const base64Image = await imageToBase64(profileImageUrl);
+    
+    // Create vCard data with base64 image (iOS compatible format)
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:Jacob Klaven
@@ -17,7 +44,7 @@ TITLE:Owner
 TEL;TYPE=CELL:+19013597778
 EMAIL;TYPE=WORK:magnivents@gmail.com
 URL;TYPE=WORK:https://magnivents.com
-PHOTO;TYPE=JPEG:${profileImageUrl}
+PHOTO;ENCODING=b;TYPE=JPEG:${base64Image}
 END:VCARD`;
     
     // Create blob and download as .vcf file for iOS compatibility
@@ -50,8 +77,8 @@ END:VCARD`;
   // Auto-prompt contact card on page load
   useEffect(() => {
     // Small delay to ensure page is fully loaded
-    const timer = setTimeout(() => {
-      handleContactCard();
+    const timer = setTimeout(async () => {
+      await handleContactCard();
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -101,7 +128,7 @@ END:VCARD`;
               <path d="M9 12l2 2 4-4"/>
               <circle cx="12" cy="12" r="10"/>
             </svg>
-            Contact card automatically offered
+            Contact card with photo automatically offered
           </div>
           
           <button className="action-btn contact-card-btn" onClick={handleContactCard}>
