@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 function App() {
+  // Customize your profile image here
+  const profileImageUrl = "https://via.placeholder.com/300x300/667eea/ffffff?text=JK";
+  
   const handleContactCard = () => {
-    // Create vCard data
+    // Create vCard data with image
+    // Note: Replace the PHOTO URL with your actual profile image URL
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:Jacob Klaven
 ORG:Magnivents
-TEL:+9013597778
+TEL:+19013597778
 EMAIL:magnivents@gmail.com
 URL:https://magnivents.com
+PHOTO:${profileImageUrl}
 END:VCARD`;
     
     // Create blob and download
@@ -30,15 +35,34 @@ END:VCARD`;
   };
 
   const handleCall = () => {
-    window.location.href = 'tel:+9013597778';
+    window.location.href = 'tel:+19013597778';
   };
+
+  // Auto-prompt contact card on page load
+  useEffect(() => {
+    // Small delay to ensure page is fully loaded
+    const timer = setTimeout(() => {
+      handleContactCard();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="app">
       <div className="business-card">
         <div className="card-header">
           <div className="avatar">
-            <div className="avatar-placeholder">JK</div>
+            <img 
+              src={profileImageUrl} 
+              alt="Jacob Klaven" 
+              className="avatar-image"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+            <div className="avatar-placeholder" style={{display: 'none'}}>JK</div>
           </div>
           <h1 className="name">Jacob Klaven</h1>
           <p className="title">Owner</p>
@@ -63,12 +87,20 @@ END:VCARD`;
         </div>
 
         <div className="card-actions">
+          <div className="auto-prompt-notice">
+            <svg className="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 12l2 2 4-4"/>
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+            Contact card automatically offered
+          </div>
+          
           <button className="action-btn contact-card-btn" onClick={handleContactCard}>
             <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            Contact Card
+            Save Contact Card
           </button>
           
           <button className="action-btn email-btn" onClick={handleEmail}>
