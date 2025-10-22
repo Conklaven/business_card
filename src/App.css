@@ -1,27 +1,30 @@
 .app {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  overflow: hidden;
 }
 
 .business-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border-radius: 24px;
-  padding: 32px 24px;
+  border-radius: 20px;
+  padding: 24px 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   width: 100%;
-  max-width: 360px;
+  max-width: 340px;
+  max-height: calc(100vh - 40px);
   margin: 0 auto;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .card-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .avatar {
@@ -75,7 +78,7 @@
 }
 
 .card-content {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .contact-info {
@@ -192,13 +195,26 @@
 
 /* Mobile optimizations */
 @media (max-width: 480px) {
-  .app {
-    padding: 16px;
+  .business-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
   }
   
-  .business-card {
-    padding: 24px 20px;
-    border-radius: 20px;
+  .card-header {
+    margin-bottom: 20px;
+  }
+  
+  .avatar {
+    margin-bottom: 16px;
+  }
+  
+  .avatar-image,
+  .avatar-placeholder {
+    width: 70px;
+    height: 70px;
+    font-size: 24px;
   }
   
   .name {
@@ -213,9 +229,76 @@
     font-size: 14px;
   }
   
+  .card-content {
+    margin-bottom: 20px;
+  }
+  
+  .contact-info {
+    gap: 12px;
+  }
+  
   .action-btn {
     padding: 14px 20px;
     font-size: 15px;
+  }
+  
+  .auto-prompt-notice {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Very small screens (height optimization) */
+@media (max-height: 600px) {
+  .business-card {
+    padding: 16px 14px;
+    max-height: calc(100vh - 20px);
+  }
+  
+  .card-header {
+    margin-bottom: 16px;
+  }
+  
+  .avatar {
+    margin-bottom: 12px;
+  }
+  
+  .avatar-image,
+  .avatar-placeholder {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+  }
+  
+  .name {
+    font-size: 22px;
+  }
+  
+  .title {
+    font-size: 15px;
+  }
+  
+  .company {
+    font-size: 13px;
+  }
+  
+  .card-content {
+    margin-bottom: 16px;
+  }
+  
+  .contact-info {
+    gap: 10px;
+  }
+  
+  .action-btn {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+  
+  .auto-prompt-notice {
+    padding: 8px 12px;
+    font-size: 12px;
+    margin-bottom: 6px;
   }
 }
 

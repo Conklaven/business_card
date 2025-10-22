@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
   // Customize your profile image here
-  const profileImageUrl = "https://via.placeholder.com/300x300/667eea/ffffff?text=JK";
+  const profileImageUrl = "https://drive.google.com/file/d/1IUTbxJqHN2cm0MSJ2TghnK-73eAgQte_/view?usp=sharing";
   
   const handleContactCard = () => {
     // Create vCard data with image
